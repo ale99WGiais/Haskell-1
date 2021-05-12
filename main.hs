@@ -6,3 +6,7 @@ factorial n = n * factorial (n-1)
 
 combinazioni :: Integer -> Integer -> Integer
 combinazioni n k = div (factorial n)  ((factorial k) * (factorial (n-k)))
+
+combinazioniElementi :: (Eq a) => [a] -> [[a]]
+combinazioniElementi [] = [[]]
+combinazioniElementi xs = foldr (\x acc -> x ++ acc) [] (map (\x -> (map (\y -> x:y) (combinazioniElementi [t | t <- xs, t /= x]))) xs)
