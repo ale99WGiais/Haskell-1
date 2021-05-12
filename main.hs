@@ -15,3 +15,6 @@ rimuoviPari :: [a] -> [a]
 rimuoviPari [] = []
 rimuoviPari [x] = [x]
 rimuoviPari (x:y:xs) = x:(rimuoviPari xs)
+
+sommaDispari :: (Num a) => [a] -> a
+sommaDispari = sum . rimuoviPari
