@@ -22,3 +22,14 @@ sommaDispari = sum . rimuoviPari
 quickSort :: (Ord a) => [a] -> [a]
 quickSort [] = []
 quickSort (x:xs) = (quickSort $ filter (<=x) xs) ++ [x] ++ (quickSort $ filter (>x) xs)
+
+dueMinori :: Ord a => [a] -> (Maybe a, Maybe a)
+dueMinori [] = (Nothing, Nothing)
+dueMinori (x:[]) = (Just x, Nothing)
+dueMinori xs = (Just a, Just b) where (a:b:_) = (quickSort xs)
+
+dispari :: [Integer] -> [Integer]
+dispari = filter (\x -> mod x 2 == 1)
+
+dueMinoriDispari :: [Integer] -> (Maybe Integer, Maybe Integer)
+dueMinoriDispari = dueMinori . dispari
