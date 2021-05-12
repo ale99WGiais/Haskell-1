@@ -14,7 +14,11 @@ combinazioniElementi xs = foldr (\x acc -> x ++ acc) [] (map (\x -> (map (\y -> 
 rimuoviPari :: [a] -> [a]
 rimuoviPari [] = []
 rimuoviPari [x] = [x]
-rimuoviPari (x:y:xs) = x:(rimuoviPari xs)
+rimuoviPari (x:_:xs) = x:(rimuoviPari xs)
 
 sommaDispari :: (Num a) => [a] -> a
 sommaDispari = sum . rimuoviPari
+
+quickSort :: (Ord a) => [a] -> [a]
+quickSort [] = []
+quickSort (x:xs) = (quickSort $ filter (<=x) xs) ++ [x] ++ (quickSort $ filter (>x) xs)
