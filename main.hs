@@ -10,3 +10,8 @@ combinazioni n k = div (factorial n)  ((factorial k) * (factorial (n-k)))
 combinazioniElementi :: (Eq a) => [a] -> [[a]]
 combinazioniElementi [] = [[]]
 combinazioniElementi xs = foldr (\x acc -> x ++ acc) [] (map (\x -> (map (\y -> x:y) (combinazioniElementi [t | t <- xs, t /= x]))) xs)
+
+rimuoviPari :: [a] -> [a]
+rimuoviPari [] = []
+rimuoviPari [x] = [x]
+rimuoviPari (x:y:xs) = x:(rimuoviPari xs)
