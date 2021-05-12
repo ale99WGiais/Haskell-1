@@ -11,13 +11,13 @@ combinazioniElementi :: (Eq a) => [a] -> [[a]]
 combinazioniElementi [] = [[]]
 combinazioniElementi xs = foldr (\x acc -> x ++ acc) [] (map (\x -> (map (\y -> x:y) (combinazioniElementi [t | t <- xs, t /= x]))) xs)
 
-rimuoviPari :: [a] -> [a]
-rimuoviPari [] = []
-rimuoviPari [x] = [x]
-rimuoviPari (x:_:xs) = x:(rimuoviPari xs)
+rimuoviPosPari :: [a] -> [a]
+rimuoviPosPari [] = []
+rimuoviPosPari [x] = [x]
+rimuoviPosPari (x:_:xs) = x:(rimuoviPosPari xs)
 
 sommaDispari :: (Num a) => [a] -> a
-sommaDispari = sum . rimuoviPari
+sommaDispari = sum . rimuoviPosPari
 
 quickSort :: (Ord a) => [a] -> [a]
 quickSort [] = []
@@ -33,3 +33,9 @@ dispari = filter (\x -> mod x 2 == 1)
 
 dueMinoriDispari :: [Integer] -> (Maybe Integer, Maybe Integer)
 dueMinoriDispari = dueMinori . dispari
+
+coppieConSommeSuffisse :: Num b => [b] -> [(b, b)]
+coppieConSommeSuffisse xs = zip xs (scanr1(+) xs)
+
+coppieConSommePrefisse :: Num b => [b] -> [(b, b)]
+coppieConSommePrefisse xs = zip xs (scanl1(+) xs)
