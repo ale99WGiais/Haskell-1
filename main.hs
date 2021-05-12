@@ -1,8 +1,8 @@
-fizz :: Int -> String
-fizz n | n `mod` 15 == 0  = "FizzBuzz"
-       | n `mod` 3  == 0  = "Fizz"
-       | n `mod` 5  == 0  = "Buzz"
-       | otherwise = show n
+module Esercizi where
 
-main :: IO()
-main = mapM_ putStrLn $ map fizz [1..100]
+factorial :: Integer -> Integer
+factorial 0 = 1
+factorial n = n * factorial (n-1)
+
+combinazioni :: Integer -> Integer -> Integer
+combinazioni n k = div (factorial n)  ((factorial k) * (factorial (n-k)))
