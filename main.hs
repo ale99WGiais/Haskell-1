@@ -129,12 +129,12 @@ toMatrix _ [] = []
 toMatrix ncols m = (take ncols m):(toMatrix ncols (drop ncols m))
 
 matProduct :: Num a => [[a]] -> [[a]] -> [[a]]
-matProduct a b = toMatrix (length $ head a) $ map (\(a, b) -> sum $ prodVec a b) $ prodottoCartesiano a (transpose b)
+matProduct a b = toMatrix (length $ head b) $ map (\(a, b) -> sum $ prodVec a b) $ prodottoCartesiano a (transpose b)
 
 
 
-a = [[1,2,3], [1, 1, 1]]
-b = [[5,1,6], [4, 1, 4], [1, 2, 0]]
+a = [[1,2,3]]
+b = [[5,1], [4, 1], [1, 2]]
 
-v = [[1,2,3], [0, 2, 4], [0, 0, 1]]
+v = [[1,2], [0, 2], [0, 0]]
 --[-6,0,-1]
