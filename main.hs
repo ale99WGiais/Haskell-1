@@ -95,12 +95,18 @@ colminmax mat = zip (opColumnsAccumulation minVec mat) (opColumnsAccumulation ma
 prodottoCartesiano :: [a] -> [b] -> [(a, b)]
 prodottoCartesiano a b = [(x,y)| x<-a, y<-b]
 
+allZero :: (Eq a, Num a) => (Int -> Int -> Bool) ->  [[a]] -> Bool
 allZero pred m = all (==0) . map snd .filter (\((r,c), _) -> pred r c)
   $ zip (prodottoCartesiano [0..((length m) - 1)] [0..((length m) - 1)]) (concat m)
 
-triangolareInferiore m = allZero (>) m
-triangolareSuperiore m = allZero (<) m
-diagonale m = allZero (/=) m
+lowertriangular :: (Eq a, Num a) => [[a]] -> Bool
+lowertriangular = allZero (>)
+
+uppertriangular :: (Eq a, Num a) => [[a]] -> Bool
+uppertriangular m = allZero (<) m
+
+diagonal :: (Eq a, Num a) => [[a]] -> Bool
+diagonal m = allZero (/=) m
 
 v = [[1,2,3], [0, 2, 4], [0, 0, 1]]
 --[-6,0,-1]
