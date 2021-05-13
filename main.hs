@@ -92,7 +92,15 @@ colaltsums v = sumVec (colsums $ rimuoviPosPari v) (colsums $ map invertiSegno $
 colminmax :: Ord b => [[b]] -> [(b, b)]
 colminmax mat = zip (opColumnsAccumulation minVec mat) (opColumnsAccumulation maxVec mat)
 
+prodottoCartesiano :: [a] -> [b] -> [(a, b)]
+prodottoCartesiano a b = [(x,y)| x<-a, y<-b]
 
+allZero pred m = all (==0) . map snd .filter (\((r,c), _) -> pred r c)
+  $ zip (prodottoCartesiano [0..((length m) - 1)] [0..((length m) - 1)]) (concat m)
 
-v = [[1,2,3], [2, 2, 4], [1, 0, 1], [6, 0, 1]]
+triangolareInferiore m = allZero (>) m
+triangolareSuperiore m = allZero (<) m
+diagonale m = allZero (/=) m
+
+v = [[1,2,3], [0, 2, 4], [0, 0, 1]]
 --[-6,0,-1]
