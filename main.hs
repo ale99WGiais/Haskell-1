@@ -63,15 +63,15 @@ matrix_dim mat
     r = length mat
     c = row_dim mat
 
-opElementwise :: ((a, a) -> a) -> [a] -> [a] -> [a]
-opElementwise op a b = map(op) $ zip a b
+opElementwise :: (a -> a -> a) -> [a] -> [a] -> [a]
+opElementwise op a b = map(\(x,y) -> op x y) $ zip a b
 
 sumVec :: Num a => [a] -> [a] -> [a]
-sumVec = opElementwise (\(x,y) -> x+y)
+sumVec = opElementwise (+)
 minVec :: (Ord a) => [a] -> [a] -> [a]
-minVec = opElementwise (\(x,y) -> (min x y))
+minVec = opElementwise min
 maxVec :: (Ord a) => [a] -> [a] -> [a]
-maxVec = opElementwise (\(x,y) -> (max x y))
+maxVec = opElementwise max
 
 opColumnsAccumulation :: ([a] -> [a] -> [a]) -> [[a]] -> [a]
 opColumnsAccumulation op = foldl1(\acc x -> op acc x)
