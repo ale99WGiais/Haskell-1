@@ -49,22 +49,35 @@ shiftToZero xs = res
           (newMi, newXs) = shiftToZeroHelp ((min mi x), xs)
       (_, res) = shiftToZeroHelp (head xs, xs)
 
-
-
 matrix_dim :: [[a]] -> (Int, Int)
 matrix_dim mat
   | c == -1 = (-1, -1)
   | otherwise = (r, c)
   where
-    row_dims :: [[a]] -> [Int]
-    row_dims = map length
     row_dim xs
       | allSame = (head dims)
       | otherwise = -1
       where
-        dims = row_dims xs
+        dims = map length xs
         allSame = all (== (head dims)) dims
     r = length mat
     c = row_dim mat
 
+sumVec :: Num a => [a] -> [a] -> [a]
+sumVec a b = map(\(x,y) -> x+y) $ zip a b
 
+colsums :: Num a => [[a]] -> [a]
+colsums = foldl1(\acc x -> sumVec acc x)
+
+invertiSegno :: Num a => [a] -> [a]
+invertiSegno = map (\x -> -x)
+
+rimuoviPosDispari :: [a] -> [a]
+rimuoviPosDispari [] = []
+rimuoviPosDispari (_:xs) = rimuoviPosPari xs
+
+colaltsums :: Num a => [[a]] -> [a]
+colaltsums v = sumVec (colsums $ rimuoviPosPari v) (colsums $ map invertiSegno $ rimuoviPosDispari v)
+
+v = [[1,2,3], [2, 2, 4], [1, 0, 1], [6, 0, 1]]
+--[-6,0,-1]
