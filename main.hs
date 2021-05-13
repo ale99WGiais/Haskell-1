@@ -96,7 +96,7 @@ prodottoCartesiano :: [a] -> [b] -> [(a, b)]
 prodottoCartesiano a b = [(x,y)| x<-a, y<-b]
 
 --lista con elementi di m la cui posizione rispetta pred
-filterMatrix pred m = map snd .filter (\((r,c), _) -> pred r c)
+filterMatrix pred m = map snd . filter (\((r,c), _) -> pred r c)
                         $ zip (prodottoCartesiano [0..((length m) - 1)] [0..((length m) - 1)]) (concat m)
 
 allZero pred m = all (==0) $ filterMatrix pred m
@@ -116,6 +116,13 @@ convergent = convergentAux (0:(cycle [1]))
         convergentAux _ [] _ = True
         convergentAux v (x:xs) r = ((<r) $ abs $ sum $ prodVec x v) && (convergentAux (1:v) xs r)
 
+transpose :: [[a]] -> [[a]]
+transpose [] = []
+transpose (x:[]) = [[t] | t <- x]
+transpose (x:xs) = map (\(l, e) -> e:l) $ zip (transpose xs) x
+
+isSymmetric :: Eq a => [[a]] -> Bool
+isSymmetric m = m == (transpose m)
 
 v = [[1,2,3], [0, 2, 4], [0, 0, 1]]
 --[-6,0,-1]
