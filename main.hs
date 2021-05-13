@@ -124,5 +124,17 @@ transpose (x:xs) = map (\(l, e) -> e:l) $ zip (transpose xs) x
 isSymmetric :: Eq a => [[a]] -> Bool
 isSymmetric m = m == (transpose m)
 
+toMatrix :: Int -> [a] -> [[a]]
+toMatrix _ [] = []
+toMatrix ncols m = (take ncols m):(toMatrix ncols (drop ncols m))
+
+matProduct :: Num a => [[a]] -> [[a]] -> [[a]]
+matProduct a b = toMatrix (length $ head a) $ map (\(a, b) -> sum $ prodVec a b) $ prodottoCartesiano a (transpose b)
+
+
+
+a = [[1,2,3], [1, 1, 1]]
+b = [[5,1,6], [4, 1, 4], [1, 2, 0]]
+
 v = [[1,2,3], [0, 2, 4], [0, 0, 1]]
 --[-6,0,-1]
