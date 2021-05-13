@@ -76,6 +76,8 @@ minVec :: (Ord a) => [a] -> [a] -> [a]
 minVec = opElementwise min
 maxVec :: (Ord a) => [a] -> [a] -> [a]
 maxVec = opElementwise max
+prodVec :: (Num a) => [a] -> [a] -> [a]
+prodVec = opElementwise (*)
 
 opColumnsAccumulation :: ([a] -> [a] -> [a]) -> [[a]] -> [a]
 opColumnsAccumulation op = foldl1(\acc x -> op acc x)
@@ -107,6 +109,15 @@ uppertriangular m = allZero (<) m
 
 diagonal :: (Eq a, Num a) => [[a]] -> Bool
 diagonal m = allZero (/=) m
+
+
+convergentAux :: (Ord a, Num a) => [a] -> [[a]] -> a -> Bool
+convergentAux _ [] _ = True
+convergentAux v (x:xs) r = ((<r) $ abs $ sum $ prodVec x v) && (convergentAux (1:v) xs r)
+
+convergent :: (Ord a, Num a) => [[a]] -> a -> Bool
+convergent= convergentAux (0:(cycle [1]))
+
 
 v = [[1,2,3], [0, 2, 4], [0, 0, 1]]
 --[-6,0,-1]
