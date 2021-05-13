@@ -40,6 +40,7 @@ coppieConSommeSuffisse xs = zip xs (scanr1(+) xs)
 coppieConSommePrefisse :: Num b => [b] -> [(b, b)]
 coppieConSommePrefisse xs = zip xs (scanl1(+) xs)
 
+shiftToZero :: (Num a, Ord a) => [a] -> [a]
 shiftToZero xs = res
   where
       shiftToZeroHelp (mi, []) = (mi, [])
@@ -47,3 +48,23 @@ shiftToZero xs = res
           where
           (newMi, newXs) = shiftToZeroHelp ((min mi x), xs)
       (_, res) = shiftToZeroHelp (head xs, xs)
+
+
+
+matrix_dim :: [[a]] -> (Int, Int)
+matrix_dim mat
+  | c == -1 = (-1, -1)
+  | otherwise = (r, c)
+  where
+    row_dims :: [[a]] -> [Int]
+    row_dims = map length
+    row_dim xs
+      | allSame = (head dims)
+      | otherwise = -1
+      where
+        dims = row_dims xs
+        allSame = all (== (head dims)) dims
+    r = length mat
+    c = row_dim mat
+
+
