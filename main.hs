@@ -40,7 +40,10 @@ coppieConSommeSuffisse xs = zip xs (scanr1(+) xs)
 coppieConSommePrefisse :: Num b => [b] -> [(b, b)]
 coppieConSommePrefisse xs = zip xs (scanl1(+) xs)
 
-
-shiftToZero (mi, []) = (mi, [])
-shiftToZero (mi, x:xs) = (newMi, (x-newMi):newXs)
-  where (newMi, newXs) = shiftToZero ((min mi x), xs)
+shiftToZero xs = res
+  where
+      shiftToZeroHelp (mi, []) = (mi, [])
+      shiftToZeroHelp (mi, x:xs) = (newMi, (x-newMi):newXs)
+          where
+          (newMi, newXs) = shiftToZeroHelp ((min mi x), xs)
+      (_, res) = shiftToZeroHelp (head xs, xs)
