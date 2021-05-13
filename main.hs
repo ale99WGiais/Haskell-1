@@ -89,7 +89,10 @@ invertiSegno = map (\x -> -x)
 colaltsums :: Num a => [[a]] -> [a]
 colaltsums v = sumVec (colsums $ rimuoviPosPari v) (colsums $ map invertiSegno $ rimuoviPosDispari v)
 
+colminmax :: Ord b => [[b]] -> [(b, b)]
 colminmax mat = zip (opColumnsAccumulation minVec mat) (opColumnsAccumulation maxVec mat)
+
+
 
 v = [[1,2,3], [2, 2, 4], [1, 0, 1], [6, 0, 1]]
 --[-6,0,-1]
