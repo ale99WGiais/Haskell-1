@@ -58,9 +58,7 @@ matrix_dim mat
   | c == -1 = (-1, -1)
   | otherwise = (r, c)
   where
-    row_dim xs
-      | allSame = (head dims)
-      | otherwise = -1
+    row_dim xs = if allSame then (head dims) else -1
       where
         dims = map length xs
         allSame = all (== (head dims)) dims
