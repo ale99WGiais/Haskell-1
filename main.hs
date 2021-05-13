@@ -110,13 +110,11 @@ uppertriangular m = allZero (<) m
 diagonal :: (Eq a, Num a) => [[a]] -> Bool
 diagonal m = allZero (/=) m
 
-
-convergentAux :: (Ord a, Num a) => [a] -> [[a]] -> a -> Bool
-convergentAux _ [] _ = True
-convergentAux v (x:xs) r = ((<r) $ abs $ sum $ prodVec x v) && (convergentAux (1:v) xs r)
-
 convergent :: (Ord a, Num a) => [[a]] -> a -> Bool
-convergent= convergentAux (0:(cycle [1]))
+convergent = convergentAux (0:(cycle [1]))
+  where convergentAux :: (Ord a, Num a) => [a] -> [[a]] -> a -> Bool
+        convergentAux _ [] _ = True
+        convergentAux v (x:xs) r = ((<r) $ abs $ sum $ prodVec x v) && (convergentAux (1:v) xs r)
 
 
 v = [[1,2,3], [0, 2, 4], [0, 0, 1]]
