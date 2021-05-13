@@ -63,11 +63,21 @@ matrix_dim mat
     r = length mat
     c = row_dim mat
 
+opElementwise :: Num a => ((a, a) -> a) -> [a] -> [a] -> [a]
+opElementwise op a b = map(op) $ zip a b
+
 sumVec :: Num a => [a] -> [a] -> [a]
-sumVec a b = map(\(x,y) -> x+y) $ zip a b
+sumVec = opElementwise (\(x,y) -> x+y)
+minVec :: (Num a, Ord a) => [a] -> [a] -> [a]
+minVec = opElementwise (\(x,y) -> (min x y))
+maxVec :: (Num a, Ord a) => [a] -> [a] -> [a]
+maxVec = opElementwise (\(x,y) -> (max x y))
+
+opColumnsAccumulation :: ([a] -> [a] -> [a]) -> [[a]] -> [a]
+opColumnsAccumulation op = foldl1(\acc x -> op acc x)
 
 colsums :: Num a => [[a]] -> [a]
-colsums = foldl1(\acc x -> sumVec acc x)
+colsums = opColumnsAccumulation sumVec
 
 invertiSegno :: Num a => [a] -> [a]
 invertiSegno = map (\x -> -x)
@@ -78,6 +88,8 @@ rimuoviPosDispari (_:xs) = rimuoviPosPari xs
 
 colaltsums :: Num a => [[a]] -> [a]
 colaltsums v = sumVec (colsums $ rimuoviPosPari v) (colsums $ map invertiSegno $ rimuoviPosDispari v)
+
+colminmax mat = zip (opColumnsAccumulation minVec mat) (opColumnsAccumulation maxVec mat)
 
 v = [[1,2,3], [2, 2, 4], [1, 0, 1], [6, 0, 1]]
 --[-6,0,-1]
