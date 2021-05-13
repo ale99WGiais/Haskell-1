@@ -11,13 +11,17 @@ combinazioniElementi :: (Eq a) => [a] -> [[a]]
 combinazioniElementi [] = [[]]
 combinazioniElementi xs = foldr (\x acc -> x ++ acc) [] (map (\x -> (map (\y -> x:y) (combinazioniElementi [t | t <- xs, t /= x]))) xs)
 
-rimuoviPosPari :: [a] -> [a]
-rimuoviPosPari [] = []
-rimuoviPosPari [x] = [x]
-rimuoviPosPari (x:_:xs) = x:(rimuoviPosPari xs)
+rimuoviPos :: (Int -> Bool) -> [a] -> [a]
+rimuoviPos cond xs = map fst $ filter (cond . snd) $ zip xs [1..]
 
-sommaDispari :: (Num a) => [a] -> a
-sommaDispari = sum . rimuoviPosPari
+rimuoviPosPari :: [a] -> [a]
+rimuoviPosPari = rimuoviPos odd
+
+rimuoviPosDispari :: [a] -> [a]
+rimuoviPosDispari = rimuoviPos even
+
+sommaPosDispari :: (Num a) => [a] -> a
+sommaPosDispari = sum . rimuoviPosPari
 
 quickSort :: (Ord a) => [a] -> [a]
 quickSort [] = []
@@ -29,16 +33,16 @@ dueMinori (x:[]) = (Just x, Nothing)
 dueMinori xs = (Just a, Just b) where (a:b:_) = (quickSort xs)
 
 dispari :: [Integer] -> [Integer]
-dispari = filter (\x -> mod x 2 == 1)
+dispari = filter odd
 
 dueMinoriDispari :: [Integer] -> (Maybe Integer, Maybe Integer)
 dueMinoriDispari = dueMinori . dispari
 
 coppieConSommeSuffisse :: Num b => [b] -> [(b, b)]
-coppieConSommeSuffisse xs = zip xs (scanr1(+) xs)
+coppieConSommeSuffisse xs = zip xs (tail $ scanr(+) 0 xs)
 
 coppieConSommePrefisse :: Num b => [b] -> [(b, b)]
-coppieConSommePrefisse xs = zip xs (scanl1(+) xs)
+coppieConSommePrefisse xs = zip xs (scanl(+) 0 xs)
 
 shiftToZero :: (Num a, Ord a) => [a] -> [a]
 shiftToZero xs = res
@@ -81,10 +85,6 @@ colsums = opColumnsAccumulation sumVec
 
 invertiSegno :: Num a => [a] -> [a]
 invertiSegno = map (\x -> -x)
-
-rimuoviPosDispari :: [a] -> [a]
-rimuoviPosDispari [] = []
-rimuoviPosDispari (_:xs) = rimuoviPosPari xs
 
 colaltsums :: Num a => [[a]] -> [a]
 colaltsums v = sumVec (colsums $ rimuoviPosPari v) (colsums $ map invertiSegno $ rimuoviPosDispari v)
