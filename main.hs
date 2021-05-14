@@ -53,15 +53,17 @@ shiftToZero xs = res
           (newMi, newXs) = shiftToZeroHelp ((min mi x), xs)
       (_, res) = shiftToZeroHelp (head xs, xs)
 
+allSame :: (Eq a) => [a] -> Bool
+allSame v = all (== (head v)) v
+
 matrix_dim :: [[a]] -> (Int, Int)
 matrix_dim mat
   | c == -1 = (-1, -1)
   | otherwise = (r, c)
   where
-    row_dim xs = if allSame then (head dims) else -1
+    row_dim xs = if allSame dims then (head dims) else -1
       where
         dims = map length xs
-        allSame = all (== (head dims)) dims
     r = length mat
     c = row_dim mat
 
@@ -131,10 +133,36 @@ toMatrix ncols m = (take ncols m):(toMatrix ncols (drop ncols m))
 matProduct :: Num a => [[a]] -> [[a]] -> [[a]]
 matProduct a b = toMatrix (length $ head b) $ map (\(a, b) -> sum $ prodVec a b) $ prodottoCartesiano a (transpose b)
 
+data BST a = Void | Node {
+  val :: a,
+  left, right :: BST a
+} deriving (Eq, Ord, Read, Show)
+
+sommaAlbero :: Num p => BST p -> p
+sommaAlbero Void = 0
+sommaAlbero n = val n + (sommaAlbero $ left n) + (sommaAlbero $ right n)
+
+a = Node {val=1, left=Void, right=Node {val=2, left=Void, right=Void}}
+
+sommaDispariAlbero Void = 0
+sommaDispariAlbero n = (if odd v then v else 0) + (sommaDispariAlbero $ left n) + (sommaDispariAlbero $ right n)
+  where v = val n
+
+samesums :: (Eq a, Num a) => [BST a] -> Bool
+samesums v = allSame $ map sommaAlbero $ v
+
+bstelem :: (Ord a, Eq a) => a -> BST a -> Bool
+bstelem _ Void = False
+bstelem x n
+  | x == cur = True
+  | x < cur = bstelem x (left n)
+  | otherwise = bstelem x (right n)
+  where cur = val n
 
 
-a = [[1,2,3], [1, 1, 1]]
-b = [[5,1], [4, 1], [1, 2]]
 
-v = [[1,2], [0, 2], [0, 0]]
+--a = [[1,2,3], [1, 1, 1]]
+--b = [[5,1], [4, 1], [1, 2]]
+
+--v = [[1,2], [0, 2], [0, 0]]
 --[-6,0,-1]
