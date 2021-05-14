@@ -133,7 +133,7 @@ matProduct a b = toMatrix (length $ head b) $ map (\(a, b) -> sum $ prodVec a b)
 
 
 
-a = [[1,2,3]]
+a = [[1,2,3], [1, 1, 1]]
 b = [[5,1], [4, 1], [1, 2]]
 
 v = [[1,2], [0, 2], [0, 0]]
