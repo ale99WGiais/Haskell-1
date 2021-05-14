@@ -152,13 +152,19 @@ samesums :: (Eq a, Num a) => [BST a] -> Bool
 samesums v = allSame $ map sommaAlbero $ v
 
 bstelem :: (Ord a, Eq a) => a -> BST a -> Bool
-bstelem _ Void = False
-bstelem x n
+_ `bstelem` Void = False
+x `bstelem` n
   | x == cur = True
-  | x < cur = bstelem x (left n)
-  | otherwise = bstelem x (right n)
+  | x < cur = x `bstelem` (left n)
+  | otherwise = x `bstelem` (right n)
   where cur = val n
 
+bstinsert :: (Ord a, Eq a) => a -> BST a -> BST a
+bstinsert x Void = Node {val=x, left=Void, right=Void}
+bstinsert x node
+  | x < cur = Node{ val=(val node), left=(bstinsert x (left node)), right= (right node)}
+  | otherwise = Node{ val=(val node), left=(left node), right= (bstinsert x (right node))}
+  where cur = val node
 
 
 --a = [[1,2,3], [1, 1, 1]]
