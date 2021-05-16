@@ -177,7 +177,30 @@ vecToBst (x:xs) = bstinsert x (vecToBst xs)
 treeord :: Ord a => [a] -> [a]
 treeord = bstToVec . vecToBst
 
+filtertree :: (a -> Bool) -> BST a -> [a]
 filtertree p = (filter p) . bstToVec
+
+nodeh :: BST (a, Integer) -> Integer
+nodeh Void = 0
+nodeh x = snd $ val x
+
+annotate :: (Ord a) => BST a -> BST (a, Integer)
+annotate Void = Void
+annotate node = Node { val = (val node, h+1), left=l, right=r}
+  where
+    l = annotate $ left node
+    r = annotate $ right node
+    h = max (nodeh l) (nodeh r)
+
+--almostBalanced :: Ord a => BST a -> Bool
+almostBalanced x = aux $ annotate x
+  where
+    aux Void = True
+    aux x = ok && (aux $ left x) && (aux $ right x)
+      where
+        lh = nodeh $ left x
+        rh = nodeh $ right x
+        ok = abs (lh-rh) < 2
 
 
 
