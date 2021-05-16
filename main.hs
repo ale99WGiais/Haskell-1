@@ -142,8 +142,6 @@ sommaAlbero :: Num p => BST p -> p
 sommaAlbero Void = 0
 sommaAlbero n = val n + (sommaAlbero $ left n) + (sommaAlbero $ right n)
 
-a = Node {val=1, left=Node {val=0, right=Void, left=Void}, right=Node {val=2, left=Void, right=Void}}
-
 sommaDispariAlbero Void = 0
 sommaDispariAlbero n = (if odd v then v else 0) + (sommaDispariAlbero $ left n) + (sommaDispariAlbero $ right n)
   where v = val n
@@ -212,8 +210,19 @@ wbstinsert x (WNode val h left right) = WNode val h l r
     height (WNode _ h _ _) = h
     h = (max (height l) (height r)) + 1
 
+a = foldl(\acc x -> bstinsert x acc) Void [2,3,0,8,6]
 b = foldl(\acc x -> wbstinsert x acc) WVoid [2,3,0,5,4]
 
+diff2next tree = fst $ aux tree diffs
+  where
+    visitOrd = bstToVec tree
+    diffs = (map (\(a,b) -> Just (b-a)) $ zip visitOrd (tail visitOrd)) ++ [Nothing]
+    aux Void diffs = (Void, diffs)
+    aux node diffs = (newNode, newDiffs)
+      where
+        (newNodeL, newDiffsL) = aux (left node) diffs
+        newNode = Node {val = (val node, head newDiffsL), left = newNodeL, right = newNodeR}
+        (newNodeR, newDiffs) = aux (right node) (tail newDiffsL)
 
 
 --a = [[1,2,3], [1, 1, 1]]
