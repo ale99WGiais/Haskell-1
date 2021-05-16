@@ -142,7 +142,7 @@ sommaAlbero :: Num p => BST p -> p
 sommaAlbero Void = 0
 sommaAlbero n = val n + (sommaAlbero $ left n) + (sommaAlbero $ right n)
 
-a = Node {val=1, left=Void, right=Node {val=2, left=Void, right=Void}}
+a = Node {val=1, left=Node {val=0, right=Void, left=Void}, right=Node {val=2, left=Void, right=Void}}
 
 sommaDispariAlbero Void = 0
 sommaDispariAlbero n = (if odd v then v else 0) + (sommaDispariAlbero $ left n) + (sommaDispariAlbero $ right n)
@@ -166,6 +166,16 @@ bstinsert x node
   | otherwise = Node{ val=(val node), left=(left node), right= (bstinsert x (right node))}
   where cur = val node
 
+bstToVec :: BST a -> [a]
+bstToVec Void = []
+bstToVec node = (bstToVec $ left node) ++ [val node] ++ (bstToVec $ right node)
+
+vecToBst :: Ord a => [a] -> BST a
+vecToBst [] = Void
+vecToBst (x:xs) = bstinsert x (vecToBst xs)
+
+treeord :: Ord a => [a] -> [a]
+treeord = bstToVec . vecToBst
 
 --a = [[1,2,3], [1, 1, 1]]
 --b = [[5,1], [4, 1], [1, 2]]
