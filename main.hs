@@ -227,6 +227,16 @@ diff2next tree = fst $ aux tree diffs
 bstlevels :: Ord a => BST a -> [a]
 bstlevels tree = map snd $ treeord $ map (\(a,b) -> (-b,a)) $ bstToVec $ annotate tree
 
+fold :: (Ord a) => (a -> b -> b -> b) -> b -> BST a -> b
+fold _ z Void = z
+fold f z ( Node x l r) = f x ( fold f z l) ( fold f z r)
+
+treeheight' tree = fold (\x l r -> 1 + (max l r)) 0 tree
+
+annotate' tree = fold (\x l r -> Node {val=(x, 1+(max (nodeh l) (nodeh r))), left=l, right=r}) Void $ tree
+
+
+
 
 --a = [[1,2,3], [1, 1, 1]]
 --b = [[5,1], [4, 1], [1, 2]]
