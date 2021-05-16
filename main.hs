@@ -225,6 +225,9 @@ diff2next tree = fst $ aux tree diffs
         (newNodeR, newDiffs) = aux (right node) (tail newDiffsL)
 
 
+bstlevels tree = map snd $ treeord $ map (\(a,b) -> (-b,a)) $ bstToVec $ annotate tree
+
+
 --a = [[1,2,3], [1, 1, 1]]
 --b = [[5,1], [4, 1], [1, 2]]
 
