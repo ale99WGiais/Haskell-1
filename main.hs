@@ -177,6 +177,10 @@ vecToBst (x:xs) = bstinsert x (vecToBst xs)
 treeord :: Ord a => [a] -> [a]
 treeord = bstToVec . vecToBst
 
+filtertree p = (filter p) . bstToVec
+
+
+
 --a = [[1,2,3], [1, 1, 1]]
 --b = [[5,1], [4, 1], [1, 2]]
 
