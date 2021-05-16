@@ -235,7 +235,15 @@ treeheight' tree = fold (\x l r -> 1 + (max l r)) 0 tree
 
 annotate' tree = fold (\x l r -> Node {val=(x, 1+(max (nodeh l) (nodeh r))), left=l, right=r}) Void $ tree
 
-
+almostBalanced' :: Ord a => BST a -> Bool
+almostBalanced' Void = True
+almostBalanced' tree = fst $ val $  fold aux Void $ tree
+  where
+    aux x l r = Node {val=(ok , 1+(max (nodeh l) (nodeh r))), left=l, right=r}
+      where
+        lh = nodeh l
+        rh = nodeh r
+        ok = (abs (lh-rh) < 2) && (fst $ val l) && (fst $ val r)
 
 
 --a = [[1,2,3], [1, 1, 1]]
