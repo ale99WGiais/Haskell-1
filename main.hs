@@ -171,8 +171,7 @@ bstToVec Void = []
 bstToVec node = (bstToVec $ left node) ++ [val node] ++ (bstToVec $ right node)
 
 vecToBst :: Ord a => [a] -> BST a
-vecToBst [] = Void
-vecToBst (x:xs) = bstinsert x (vecToBst xs)
+vecToBst = foldl(\acc x -> bstinsert x acc) Void
 
 treeord :: Ord a => [a] -> [a]
 treeord = bstToVec . vecToBst
@@ -192,7 +191,7 @@ annotate node = Node { val = (val node, h+1), left=l, right=r}
     r = annotate $ right node
     h = max (nodeh l) (nodeh r)
 
---almostBalanced :: Ord a => BST a -> Bool
+almostBalanced :: Ord a => BST a -> Bool
 almostBalanced x = aux $ annotate x
   where
     aux Void = True
@@ -201,6 +200,19 @@ almostBalanced x = aux $ annotate x
         lh = nodeh $ left x
         rh = nodeh $ right x
         ok = abs (lh-rh) < 2
+
+data WBST a = WVoid | WNode a Int ( WBST a) ( WBST a) deriving (Read, Show)
+
+wbstinsert x WVoid = WNode x 1 WVoid WVoid
+wbstinsert x (WNode val h left right) = WNode val h l r
+  where
+    l = if x < val then wbstinsert x left else left
+    r = if x >= val then wbstinsert x right else right
+    height WVoid = 0
+    height (WNode _ h _ _) = h
+    h = (max (height l) (height r)) + 1
+
+b = foldl(\acc x -> wbstinsert x acc) WVoid [2,3,0,5,4]
 
 
 
