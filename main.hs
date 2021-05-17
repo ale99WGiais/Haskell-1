@@ -245,11 +245,14 @@ almostBalanced' tree = fst $ val $  fold aux Void $ tree
         rh = nodeh r
         ok = (abs (lh-rh) < 2) && (fst $ val l) && (fst $ val r)
 
---diameter :: Ord a => BST a -> Integer
+diameter :: Ord a => BST a -> Integer
 diameter tree = fst $ fold (\x l r -> (maxh x l r, h x l r)) (0, -1) tree
   where
-    maxh x l r = max (max (fst l) (fst r)) (2 + (snd l) + (snd r))
+    maxh x l r = maximum [fst l, fst r, 2 + (snd l) + (snd r)]
     h x l r = 1 + (max (snd l) (snd r))
+
+maxDiameter :: Ord a => [BST a] -> Integer
+maxDiameter = maximum . map diameter
 
 
 
