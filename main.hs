@@ -254,6 +254,21 @@ diameter tree = fst $ fold (\x l r -> (maxh x l r, h x l r)) (0, -1) tree
 maxDiameter :: Ord a => [BST a] -> Integer
 maxDiameter = maximum . map diameter
 
+isBst tree = ok' $ fold (\x l r -> ((isok x l r, True), (newmin x l r, newmax x l r))) ((True, False), (val tree, val tree)) tree
+  where
+    min' = fst . snd
+    max' = snd . snd
+    ok' = fst . fst
+    present' = snd . fst
+    isok x l r
+      | (not (ok' l)) || (not (ok' r)) = False
+      | (present' l) && (x < max' l) = False
+      | (present' r) && (x > min' r) = False
+      | otherwise = True
+    newmin x l r = if present' l then min' l else x
+    newmax x l r = if present' r then max' r else x
+
+
 
 
 --a = [[1,2,3], [1, 1, 1]]
