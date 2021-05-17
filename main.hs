@@ -254,6 +254,7 @@ diameter tree = fst $ fold (\x l r -> (maxh x l r, h x l r)) (0, -1) tree
 maxDiameter :: Ord a => [BST a] -> Integer
 maxDiameter = maximum . map diameter
 
+isBst :: Ord a => BST a -> Bool
 isBst tree = ok' $ fold (\x l r -> ((isok x l r, True), (newmin x l r, newmax x l r))) ((True, False), (val tree, val tree)) tree
   where
     min' = fst . snd
@@ -267,6 +268,18 @@ isBst tree = ok' $ fold (\x l r -> ((isok x l r, True), (newmin x l r, newmax x 
       | otherwise = True
     newmin x l r = if present' l then min' l else x
     newmax x l r = if present' r then max' r else x
+
+data ABST a = AVoid | ANode Bal a ( ABST a) ( ABST a) deriving (Eq , Ord , Read , Show )
+data Bal = Left | Bal | Right deriving (Eq , Ord , Read , Show )
+
+
+-- todo alberi ricerca 19, 20
+
+bst2List' :: Ord a => BST a -> [a]
+bst2List' tree = fold (\x l r -> l ++ [x] ++ r) [] tree
+
+filtertree :: (a -> Bool) -> BST a -> [a]
+filtertree' p = fold (\x l r -> l ++ (if p x then [x] else []) ++ r) []
 
 
 
