@@ -308,7 +308,23 @@ isBst tree = ok' $ fold (\x l r -> ((isok x l r, True), (newmin x l r, newmax x 
     newmax x l r = if present' r then max' r else x
 
 data ABST a = AVoid | ANode Bal a ( ABST a) ( ABST a) deriving (Eq , Ord , Read , Show )
-data Bal = Left | Bal | Right deriving (Eq , Ord , Read , Show )
+data Bal = ALeft | ABal | ARight deriving (Eq , Ord , Read , Show )
+
+isAvl = snd . aux
+  where
+    aux :: ABST a -> (Integer, Bool)
+    aux (AVoid) = (0, True)
+    aux (ANode bal _ left right) = (1 + (max hLeft hRight), okLeft && okRight && okThis)
+      where
+        (hLeft, okLeft) = aux left
+        (hRight, okRight) = aux right
+        okThis
+          | bal == ALeft && hLeft == hRight + 1 = True
+          | bal == ABal && hLeft == hRight = True
+          | bal == ALeft && hLeft + 1 == hRight = True
+          | otherwise = False
+
+t = ANode ALeft 5 (ANode ARight 3 AVoid AVoid) (AVoid)
 
 
 -- todo alberi ricerca 19, 20
@@ -324,11 +340,11 @@ bst2List' tree = fold (\x l r -> l ++ [x] ++ r) [] tree
 
 -- Alberi generici
 
-data (Eq a, Show a) => Tree a = Void | Node a [Tree a]
+data Tree a = TVoid | TNode a [Tree a]
   deriving (Eq, Show)
 
-treefold :: (Eq a, Show a) => (a -> [b] -> b) -> b -> Tree a -> b
-treefold =
+--treefold :: (Eq a, Show a) => (a -> [b] -> b) -> b -> Tree a -> b
+--treefold =
 
 --a = [[1,2,3], [1, 1, 1]]
 --b = [[5,1], [4, 1], [1, 2]]
